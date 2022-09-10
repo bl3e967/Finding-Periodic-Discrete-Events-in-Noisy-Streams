@@ -154,7 +154,7 @@ class TestContainerProperties(unittest.TestCase):
         self.assertNotEqual(h4, h1, "Test case 3: __eq__ method check returned True when False was expected.")
         self.assertNotEqual(h4, h2, "Test case 4: __eq__ method check returned True when False was expected.")
         self.assertNotEqual(h4, h3, "Test case 5: __eq__ method check returned True when False was expected.")
-        self.assertNotEqual(h4, h5, f"Test case 6: __eq__ method check returned False when True was expected.")
+        self.assertEqual(h4, h5, f"Test case 6: __eq__ method check returned False when True was expected.")
 
 
     def test_particle_getitem(self):
@@ -181,14 +181,15 @@ class TestContainerProperties(unittest.TestCase):
             
         # test integer index 
         for i in range(-3, N):
+            expected = Particles(np.array([t[i]]), 
+                                np.array([l[i]]), 
+                                np.array([s[i]]), 
+                                np.array([x[i]]), 
+                                np.array([z[i]]), 
+                                1)
             msg = f"{i}: Expected {h[i]} to be equal to {expected} but __eq__ returned False"
             with self.subTest(i=i, msg=msg):
-                expected = Particles(np.array([t[i]]), 
-                                    np.array([l[i]]), 
-                                    np.array([s[i]]), 
-                                    np.array([x[i]]), 
-                                    np.array([z[i]]), 
-                                    1)
+                self.assertEqual(h[i], expected)
 
         sidx = 0
         eidx = 3
@@ -225,7 +226,7 @@ class TestContainerProperties(unittest.TestCase):
         # set single index
         arr = np.ones(N)
         for idx in range(-3,N):
-            with self.subTest(i=i):
+            with self.subTest(i=idx):
                 h[idx] = Particles(np.zeros(1),np.zeros(1),np.zeros(1),np.zeros(1),np.zeros(1),1)
                 arr[idx] = 0
                 expected = Particles(arr, arr, arr, arr, arr, N)
@@ -256,4 +257,3 @@ class TestContainerProperties(unittest.TestCase):
         self.assertTrue(np.array_equal(h.Sigma,arr), f"Expected h.Sigma to give {arr} but got {h.Sigma}")
         self.assertTrue(np.array_equal(h.X,arr), f"Expected h.X to give {arr} but got {h.X}")
         self.assertTrue(np.array_equal(h.Z,arr), f"Expected h.Z to give {arr} but got {h.Z}")
-        

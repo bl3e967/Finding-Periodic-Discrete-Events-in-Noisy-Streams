@@ -23,13 +23,13 @@ class TestIntegration(unittest.TestCase):
         self.Sigma = 0.01
         self.Lambda = 0.005
         self.N = 50
-        self.conf = Config(signal=self.signal_timestamps, num_particles=256, w_mult_decay_rate=10, c=2, T_cauchy_scale=1.0,
-                           Lambda_cauchy_scale=0.0001, Sigma_cauchy_scale=0.001, prior_T_scale=5, prior_lambda_scale=0.001)
-        
         self.signal_timestamps, self.periodic, self.noise = self.generate_test_signal(
             self.T, self.Sigma, self.Lambda, self.N)
 
-        self.target_relative_error = 0.07288346629199467
+        self.conf = Config(signal=self.signal_timestamps, num_particles=256, w_mult_decay_rate=10, c=2, T_cauchy_scale=1.0,
+                           Lambda_cauchy_scale=0.0001, Sigma_cauchy_scale=0.001, prior_T_scale=5, prior_lambda_scale=0.001)
+        
+        self.target_relative_error = 0.019088192640903775
         self.target_dcml_place = 10
 
     def generate_test_signal(self, T, Sigma, Lambda, N):
@@ -64,7 +64,7 @@ class TestIntegration(unittest.TestCase):
         return signal_timestamps, periodic_series, noise_series
 
     def test_model(self):
-        # np.random.seed(1)
+        np.random.seed(1)
 
         # PeriodicityParticleFilter.initialise_samples = override_initialise_particles
         model = PeriodicityParticleFilter(self.conf)
