@@ -2,15 +2,11 @@
 
 This project is an informal implementation of a particle filter applied to detecting discrete time events in noisy signals, proposed by `(Ghosh, Lucas and Sarkar, 2017)`. I refer the reader to the original authors' abstract for a brief summary of this model.
 
-```
-Periodic phenomena are ubiquitous, but detecting and predicting periodic events can be difficult in noisy environments. We describe a model of periodic events that covers both idealized and realistic scenarios characterized by multiple kinds of noise. 
-
-The model incorporates false-positive events and the possibility that the underlying period and phase of the events change over time. We then describe a particle filter that can efficiently and accurately estimate the parameters of the process generating periodic events intermingled with independent noise events. 
-
-The system has a small memory footprint, and, unlike alternative methods, its computational complexity is constant in the number of events that have been observed.
-
-As a result, it can be applied in low-resource seings that require real-time performance over long periods of time. In experiments on real and simulated data we find that it outperforms existing methods in accuracy and can track changes in periodicity and other characteristics in dynamic event streams.
-```
+*Periodic phenomena are ubiquitous, but detecting and predicting periodic events can be difficult in noisy environments. We describe a model of periodic events that covers both idealized and realistic scenarios characterized by multiple kinds of noise.*
+*The model incorporates false-positive events and the possibility that the underlying period and phase of the events change over time. We then describe a particle filter that can efficiently and accurately estimate the parameters of the process generating periodic events intermingled with independent noise events.*
+*The system has a small memory footprint, and, unlike alternative methods, its computational complexity is constant in the number of events that have been observed.*
+*As a result, it can be applied in low-resource settings that require real-time performance over long periods of time. In experiments on real and simulated data we find that it outperforms existing methods in accuracy and can track changes in periodicity and other characteristics in dynamic event streams.*
+---
 
 # Quick Setup
 As this project is intended to be an informal implementation, I would suggest using an editable installation of this package so that the user can refer back to the source code and make custom changes they wish to make.
