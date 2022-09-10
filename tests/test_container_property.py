@@ -141,7 +141,7 @@ class TestContainerProperties(unittest.TestCase):
 
         h3 = Particles(t, l, s, x, z, len(t))
 
-        assert h1 != h3, f"Test case 2: __eq__ method check returned True when False was expected."
+        self.assertNotEqual(h1, h3, f"Test case 2: __eq__ method check returned True when False was expected.")
 
         t = np.array([1])
         l = np.array([1])
@@ -151,13 +151,13 @@ class TestContainerProperties(unittest.TestCase):
         h4 = Particles(t, l, s, x, z, 1)
         h5 = Particles(t, l, s, x, z, 1)
 
-        assert h4 != h1, "Test case 3: __eq__ method check returned True when False was expected."
-        assert h4 != h2, "Test case 4: __eq__ method check returned True when False was expected."
-        assert h4 != h3, "Test case 5: __eq__ method check returned True when False was expected."
-        assert h4 == h5, f"Test case 6: __eq__ method check returned False when True was expected."
+        self.assertNotEqual(h4, h1, "Test case 3: __eq__ method check returned True when False was expected.")
+        self.assertNotEqual(h4, h2, "Test case 4: __eq__ method check returned True when False was expected.")
+        self.assertNotEqual(h4, h3, "Test case 5: __eq__ method check returned True when False was expected.")
+        self.assertNotEqual(h4, h5, f"Test case 6: __eq__ method check returned False when True was expected.")
 
 
-    def test_particle_getitem():
+    def test_particle_getitem(self):
         N = 10
         t = np.array(range(0,N))
         l = np.array(range(0,N)) * 2 # multiply just to differentiate values for each var 
@@ -167,34 +167,28 @@ class TestContainerProperties(unittest.TestCase):
 
         h = Particles(t, l, s, x, z, len(t))
 
+        M = N + 100
         # test out of index for integer index 
-        try: 
-            M = N + 100
+        with self.assertRaises(IndexError, msg=f"Expected Particles[{M}] to raise IndexError as Particles " + \
+                f"object contains {M} particles, but no IndexError was raised"):
             h[N]
-            raise AssertionError(f"Expected Particles[{M}] to raise IndexError as Particles " + \
-                f"object contains {M} particles, but no IndexError was raised")
-        except IndexError as e: 
-            pass 
 
         # test out of index for slice
-        try: 
-            sidx, eidx = int(N/2), N + 100
+        sidx, eidx = int(N/2), N + 100
+        with self.assertRaises(IndexError, msg=f"Expected Particles[{sidx}:{eidx}] to raise IndexError as Particles " + \
+                f"object contains {M} particles, but no IndexError was raised"):
             h[sidx:eidx]
-            raise AssertionError(f"Expected Particles[{sidx}:{eidx}] to raise IndexError as Particles " + \
-                f"object contains {M} particles, but no IndexError was raised")
-        except IndexError as e:
-            pass 
-
+            
         # test integer index 
         for i in range(-3, N):
-            expected = Particles(np.array([t[i]]), 
-                                np.array([l[i]]), 
-                                np.array([s[i]]), 
-                                np.array([x[i]]), 
-                                np.array([z[i]]), 
-                                1)
             msg = f"{i}: Expected {h[i]} to be equal to {expected} but __eq__ returned False"
-            assert h[i] == expected,  msg
+            with self.subTest(i=i, msg=msg):
+                expected = Particles(np.array([t[i]]), 
+                                    np.array([l[i]]), 
+                                    np.array([s[i]]), 
+                                    np.array([x[i]]), 
+                                    np.array([z[i]]), 
+                                    1)
 
         sidx = 0
         eidx = 3
@@ -205,7 +199,7 @@ class TestContainerProperties(unittest.TestCase):
                             np.array(z[sidx:eidx]),
                             eidx - sidx)
         got = h[sidx:eidx]
-        assert got == expected, f"Expected {expected} but received {got} for Particles[{sidx}:{eidx}]"
+        self.assertEqual(got, expected, f"Expected {expected} but received {got} for Particles[{sidx}:{eidx}]")
 
         sidx = -3
         eidx = -1
@@ -216,9 +210,9 @@ class TestContainerProperties(unittest.TestCase):
                             np.array(z[sidx:eidx]),
                             2)
         got = h[sidx:eidx]
-        assert got == expected, f"Expected {expected} but received {got} for Particles[{sidx}:{eidx}]"
+        self.assertEqual(got, expected, f"Expected {expected} but received {got} for Particles[{sidx}:{eidx}]")
 
-    def test_particle_setitem():
+    def test_particle_setitem(self):
         N = 10
         t = np.ones(N)
         l = np.ones(N)
@@ -231,16 +225,16 @@ class TestContainerProperties(unittest.TestCase):
         # set single index
         arr = np.ones(N)
         for idx in range(-3,N):
-            h[idx] = Particles(np.zeros(1),np.zeros(1),np.zeros(1),np.zeros(1),np.zeros(1),1)
-            arr[idx] = 0
-            expected = Particles(arr, arr, arr, arr, arr, N)
-            assert h == expected, f"Expected {expected} but got {h} when setting Particles[{idx}]"
-
-            assert np.array_equal(h.T, arr), f"Expected h.T to give {arr} but got {h.T}"
-            assert np.array_equal(h.Lambda,arr), f"Expected h.Lambda to give {arr} but got {h.Lambda}"
-            assert np.array_equal(h.Sigma,arr), f"Expected h.Sigma to give {arr} but got {h.Sigma}"
-            assert np.array_equal(h.X,arr), f"Expected h.X to give {arr} but got {h.X}"
-            assert np.array_equal(h.Z,arr), f"Expected h.Z to give {arr} but got {h.Z}"
+            with self.subTest(i=i):
+                h[idx] = Particles(np.zeros(1),np.zeros(1),np.zeros(1),np.zeros(1),np.zeros(1),1)
+                arr[idx] = 0
+                expected = Particles(arr, arr, arr, arr, arr, N)
+                self.assertEqual(h, expected, f"Expected {expected} but got {h} when setting Particles[{idx}]")
+                self.assertTrue(np.array_equal(h.T, arr), f"Expected h.T to give {arr} but got {h.T}")
+                self.assertTrue(np.array_equal(h.Lambda,arr), f"Expected h.Lambda to give {arr} but got {h.Lambda}")
+                self.assertTrue(np.array_equal(h.Sigma,arr), f"Expected h.Sigma to give {arr} but got {h.Sigma}")
+                self.assertTrue(np.array_equal(h.X,arr), f"Expected h.X to give {arr} but got {h.X}")
+                self.assertTrue(np.array_equal(h.Z,arr), f"Expected h.Z to give {arr} but got {h.Z}")
 
         # set using slice
         t = np.ones(N)
@@ -257,8 +251,9 @@ class TestContainerProperties(unittest.TestCase):
         arr = np.ones(N)
         arr[sidx:eidx] = 100
 
-        assert np.array_equal(h.T, arr), f"Expected h.T to give {arr} but got {h.T}"
-        assert np.array_equal(h.Lambda,arr), f"Expected h.Lambda to give {arr} but got {h.Lambda}"
-        assert np.array_equal(h.Sigma,arr), f"Expected h.Sigma to give {arr} but got {h.Sigma}"
-        assert np.array_equal(h.X,arr), f"Expected h.X to give {arr} but got {h.X}"
-        assert np.array_equal(h.Z,arr), f"Expected h.Z to give {arr} but got {h.Z}"
+        self.assertTrue(np.array_equal(h.T, arr), f"Expected h.T to give {arr} but got {h.T}")
+        self.assertTrue(np.array_equal(h.Lambda,arr), f"Expected h.Lambda to give {arr} but got {h.Lambda}")
+        self.assertTrue(np.array_equal(h.Sigma,arr), f"Expected h.Sigma to give {arr} but got {h.Sigma}")
+        self.assertTrue(np.array_equal(h.X,arr), f"Expected h.X to give {arr} but got {h.X}")
+        self.assertTrue(np.array_equal(h.Z,arr), f"Expected h.Z to give {arr} but got {h.Z}")
+        
