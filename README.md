@@ -1,4 +1,4 @@
-# Periodic Event Detection
+# Finding Periodic Discrete Events in Noisy Streams
 
 This project is an informal implementation of a particle filter applied to detecting discrete time events in noisy signals, proposed by `(Ghosh, Lucas and Sarkar, 2017)`. I refer the reader to the original authors' abstract for a brief summary of this model.
 
