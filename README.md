@@ -40,6 +40,8 @@ model = PeriodicityParticleFilter(conf)
 res = model.fit()
 ```
 
+Example usage can be found in `notebooks/research.ipynb`. 
+
 # Notes
 
 During testing, it was found that the model performance is sensitive to the scale parameters for the hypothesis update step of the particle filter. An improper scale means the respective parameter never converges, or diverges after converging. Therefore, the user should calibrate these parameters for their specific application. 
