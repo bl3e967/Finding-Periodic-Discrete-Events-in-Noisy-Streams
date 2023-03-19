@@ -29,7 +29,7 @@ python -m pip install -e .
 
 # Usage
 
-'''
+```
 conf = Config(
   signal=signal_timestamps, 
   num_particles=256, 
@@ -38,7 +38,7 @@ conf = Config(
 model = PeriodicityParticleFilter(conf)
 
 res = model.fit()
-'''
+```
 
 # Notes
 
